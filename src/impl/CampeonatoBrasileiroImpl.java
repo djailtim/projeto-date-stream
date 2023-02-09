@@ -14,7 +14,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
@@ -46,36 +45,37 @@ public class CampeonatoBrasileiroImpl {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        List<String> lines = Files.readAllLines(pathOfFile);
-        List<Jogo> listaJogos = new ArrayList<>();
+        List<Jogo> listaJogos = Files.readAllLines(pathOfFile)
+            .stream()
+            .skip(1)
+            .map(infoString -> {
+                String[] informacoes = infoString.split(";");
 
-        for (String line : lines.stream().skip(1).toList()) {
-            String[] infos = line.split(";");
+                Integer rodada = Integer.valueOf(informacoes[0]);
+                LocalDate data = LocalDate.parse(informacoes[1], dateFormatter);
+                if(informacoes[2].equals("")) informacoes[2] = "00h00";
+                LocalTime horario = LocalTime.parse(informacoes[2].replace("h", ":"), timeFormatter);
+                
+                DayOfWeek diaSemana = data.getDayOfWeek();
+                DataDoJogo dataDoJogo = new DataDoJogo(data, horario, diaSemana);
 
-            Integer rodada = Integer.parseInt(infos[0]);
-            LocalDate data = LocalDate.parse(infos[1], dateFormatter);
-            if(infos[2].equals("")) infos[2] = "00h00";
-            LocalTime horario = LocalTime.parse(infos[2].replace("h", ":"), timeFormatter);
-            
-            DayOfWeek diaSemana = data.getDayOfWeek();
-            DataDoJogo dataDoJogo = new DataDoJogo(data, horario, diaSemana);
+                Time timeMandante = new Time(informacoes[4]);
+                Time timeVisitante = new Time(informacoes[5]);
+                Time timeVencedor = new Time(informacoes[6]);
+                
+                String arena = informacoes[7];
+                Integer placarMandante = Integer.parseInt(informacoes[8]);
+                Integer placarVisitante = Integer.parseInt(informacoes[9]);
 
-            Time timeMandante = new Time(infos[4]);
-            Time timeVisitante = new Time(infos[5]);
-            Time timeVencedor = new Time(infos[6]);
-            
-            String arena = infos[7];
-            Integer placarMandante = Integer.parseInt(infos[8]);
-            Integer placarVisitante = Integer.parseInt(infos[9]);
+                String estadoMandante = informacoes[10];
+                String estadoVisitante = informacoes[11];
+                String estadoVencedor = informacoes[12];
 
-            String estadoMandante = infos[10];
-            String estadoVisitante = infos[11];
-            String estadoVencedor = infos[12];
+                Jogo jogo = new Jogo(rodada, dataDoJogo, timeMandante, timeVisitante, timeVencedor, arena, placarMandante, placarVisitante, estadoMandante, estadoVisitante, estadoVencedor);
 
-            Jogo jogo = new Jogo(rodada, dataDoJogo, timeMandante, timeVisitante, timeVencedor, arena, placarMandante, placarVisitante, estadoMandante, estadoVisitante, estadoVencedor);
-
-            listaJogos.add(jogo);
-        }
+                return jogo;
+            })
+            .collect(Collectors.toList());
 
         return listaJogos;
     }
