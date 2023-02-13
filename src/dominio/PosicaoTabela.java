@@ -1,17 +1,17 @@
 package dominio;
 
 public record PosicaoTabela(Time time,
-                            Long vitorias,
-                            Long derrotas,
-                            Long empates,
-                            Long golsPositivos,
-                            Long golsSofridos,
-                            Long saldoDeGols,
-                            Long jogos) {
+        Long vitorias,
+        Long derrotas,
+        Long empates,
+        Long golsPositivos,
+        Long golsSofridos,
+        Long saldoDeGols,
+        Long jogos) {
 
     @Override
     public String toString() {
-        return  time +
+        return time +
                 ", pontos=" + pontos() + // desenvolver forma de obter a pontuação
                 ", vitorias=" + vitorias +
                 ", derrotas=" + derrotas +
@@ -22,8 +22,8 @@ public record PosicaoTabela(Time time,
                 ", jogos=" + jogos +
                 '}';
     }
-    
-    public long pontos () {
+
+    public long pontos() {
         long pontosVitoria = 3;
         return ((pontosVitoria * vitorias) + empates);
     }

@@ -16,8 +16,8 @@ public class Aplicacao {
         Path file = Path.of("campeonato-brasileiro.csv");
 
         // obter a implementação: (ponto extra - abstrair para interface)
-        CampeonatoBrasileiroImpl resultados =
-                new CampeonatoBrasileiroImpl(file, (jogo) -> jogo.data().data().getYear() == 2019);
+        CampeonatoBrasileiroImpl resultados = new CampeonatoBrasileiroImpl(file,
+                (jogo) -> jogo.data().data().getYear() == 2019);
 
         // imprimir estatisticas
         imprimirEstatisticas(resultados);
@@ -37,12 +37,12 @@ public class Aplicacao {
         Map.Entry<Resultado, Long> placarMaisRepetido = brasileirao.getPlacarMaisRepetido();
 
         System.out.println("Estatisticas (Placar mais repetido) - "
-                + placarMaisRepetido.getKey() + " (" +placarMaisRepetido.getValue() + " jogo(s))");
+                + placarMaisRepetido.getKey() + " (" + placarMaisRepetido.getValue() + " jogo(s))");
 
         Map.Entry<Resultado, Long> placarMenosRepetido = brasileirao.getPlacarMenosRepetido();
 
         System.out.println("Estatisticas (Placar menos repetido) - "
-                + placarMenosRepetido.getKey() + " (" +placarMenosRepetido.getValue() + " jogo(s))");
+                + placarMenosRepetido.getKey() + " (" + placarMenosRepetido.getValue() + " jogo(s))");
 
         Long jogosCom3OuMaisGols = brasileirao.getTotalJogosCom3OuMaisGols();
         Long jogosComMenosDe3Gols = brasileirao.getTotalJogosComMenosDe3Gols();
@@ -64,7 +64,7 @@ public class Aplicacao {
         System.out.println("## TABELA CAMPEONADO BRASILEIRO: ##");
         int colocacao = 1;
         for (PosicaoTabela posicao : posicoes) {
-            System.out.println(colocacao +". " + posicao);
+            System.out.println(colocacao + ". " + posicao);
             colocacao++;
         }
 
